@@ -18,7 +18,7 @@ function ContactModal({ contacts, setContacts, setEditingContact, editingContact
   const [errorMessage, setErrorMessage] = useState('');
 
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -32,9 +32,9 @@ function ContactModal({ contacts, setContacts, setEditingContact, editingContact
     
     const newContact: IContact = {
       id: editingContact ? editingContact.id : generateUUID(),
-      name: name as string,
-      phone: phone as string,
-      email: email as string,
+      name: typeof name === 'string' ? name : '', 
+      phone: typeof phone === 'string' ? phone : '',
+      email: typeof email === 'string' ? email : '',
       age: isNaN(age) ? 0 : age
     };
     
@@ -95,7 +95,7 @@ function ContactModal({ contacts, setContacts, setEditingContact, editingContact
       </Modal.Header>
 
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleFormSubmit}>
           <Form.Group controlId="formName">
             <Form.Label>Name</Form.Label>
             <Form.Control type="text" defaultValue={editingContact?.name} name="name" required />
@@ -120,7 +120,7 @@ function ContactModal({ contacts, setContacts, setEditingContact, editingContact
             <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" name={editingContact ? 'update' : 'add'}>
               {loading ? <Spinner size="sm" /> : editingContact ? 'Update' : 'Add'}
             </Button>
           </div>
